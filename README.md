@@ -74,18 +74,22 @@ Look at **Data_Dictonary.xlxs**
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/8b14e41a-6a42-465d-a821-b88301e41eae)
 
 - Config ** Data Gateway **
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/1b8202b3-9a5f-47a1-9182-f0c436d4da45)
 
 
 - Items in Fabric
 **DEV**
+  
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/e4b0f8f1-a459-4b47-a568-cf5df57a91b1)
 
 **UAT**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/962122dd-5136-4417-8094-713f2b205de3)
 
 
 **META**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/cd649bd8-ab9a-4016-8e64-dbd316b1a8d4)
 
 
@@ -141,6 +145,7 @@ Look at **Data_Dictonary.xlxs**
 
 
 **Log_Data**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/74e78d30-4111-48be-87cb-b480348c9272)
 
 1. Source to Bronze

@@ -1,0 +1,244 @@
+{
+    "name": "PL_Master",
+    "objectId": "15496e8d-3558-499d-9c8f-176ac313e9d6",
+    "properties": {
+        "activities": [
+            {
+                "name": "pipeline_run_time",
+                "type": "SetVariable",
+                "dependsOn": [],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "variableName": "pipeline_run_time",
+                    "value": {
+                        "value": "@utcnow()",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "pl_source_to_bronze",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "set_workspace_id",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    },
+                    {
+                        "activity": "set_lakehouse_id",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "2d838294-3dc1-4d0e-a4a9-ca35160189e2",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "pipeline_run_time": {
+                            "value": "@variables('pipeline_run_time')",
+                            "type": "Expression"
+                        },
+                        "lakehouse_id": {
+                            "value": "@variables('lakehouse_id')",
+                            "type": "Expression"
+                        },
+                        "workspace_id": {
+                            "value": "@variables('workspace_id')",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "failed_source_to_bronze",
+                "type": "Teams",
+                "dependsOn": [
+                    {
+                        "activity": "pl_source_to_bronze",
+                        "dependencyConditions": [
+                            "Failed"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "inputs": {
+                        "method": "post",
+                        "path": "/beta/teams/conversation/message/poster/User/location/Group chat",
+                        "body": {
+                            "recipient": "19:79d9eaf13837409d9e4403f4a9be28da@thread.v2",
+                            "messageBody": "<h3><span style=\"font-family: times new roman; font-size: 18px\">Pipeline Source to Bronze - </span><span style=\"font-family: times new roman; font-size: 18px\">@{formatDateTime(utcnow(), 'MM/dd/yyyy')}</span><span style=\"font-family: times new roman; font-size: 24px\"></span><span style=\"font-family: times new roman; font-size: 18px\"></span></h3>\n<p><span style=\"font-family: times new roman; font-size: 16px\"></span><span style=\"font-family: times new roman; font-size: 16px\"><strong>Workspace</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{pipeline().DataFactory}</span><span style=\"font-family: times new roman; font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Pipeline Name</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: PL_Source_to_Bronze</span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Pipeline Run ID</strong></span><span style=\"font-family: times new roman; font-size: 16px\">:  </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_source_to_bronze').PipelineRunId}</span><span style=\"font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Start Time</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_source_to_bronze').ExecutionStartTime}</span><span style=\"font-family: times new roman; font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>End Time</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_source_to_bronze').ExecutionEndTime}</span><span style=\"font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Duration</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_source_to_bronze').Duration}</span><span style=\"font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Status</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_source_to_bronze').Status}</span><span style=\"font-family: times new roman; font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Error Code</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_source_to_bronze').Error.errorCode}</span><span style=\"font-family: times new roman; font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Error Message</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_source_to_bronze').Error.message}</span><span style=\"font-family: times new roman; font-size: 16px\"></span><span style=\"font-family: times new roman; font-size: 18px\"></span></p>"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "detect_workspace_lakehouse",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "pipeline_run_time",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "8d95613c-34c6-49b6-82b8-88164a4df045",
+                    "workspaceId": "a2719874-ed1d-47f0-be1d-c88fd0db2547"
+                }
+            },
+            {
+                "name": "set_workspace_id",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "detect_workspace_lakehouse",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "variableName": "workspace_id",
+                    "value": {
+                        "value": "@json(activity('detect_workspace_lakehouse').output.result.exitValue).WorkspaceId",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "set_lakehouse_id",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "detect_workspace_lakehouse",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "variableName": "lakehouse_id",
+                    "value": {
+                        "value": "@json(activity('detect_workspace_lakehouse').output.result.exitValue).ElementId",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "pl_bronze_to_silver",
+                "type": "ExecutePipeline",
+                "dependsOn": [
+                    {
+                        "activity": "pl_source_to_bronze",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "pipeline": {
+                        "referenceName": "715b2d24-d0bd-4d0f-9edd-a3f00bc0d046",
+                        "type": "PipelineReference"
+                    },
+                    "waitOnCompletion": true,
+                    "parameters": {
+                        "workspace_id": {
+                            "value": "@variables('workspace_id')",
+                            "type": "Expression"
+                        },
+                        "lakehouse_id": {
+                            "value": "@variables('lakehouse_id')",
+                            "type": "Expression"
+                        },
+                        "pipelineruntime": {
+                            "value": "@variables('pipeline_run_time')",
+                            "type": "Expression"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "fail_bronze_to_silver",
+                "type": "Teams",
+                "dependsOn": [
+                    {
+                        "activity": "pl_bronze_to_silver",
+                        "dependencyConditions": [
+                            "Failed"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "inputs": {
+                        "method": "post",
+                        "path": "/beta/teams/conversation/message/poster/User/location/Group chat",
+                        "body": {
+                            "recipient": "19:79d9eaf13837409d9e4403f4a9be28da@thread.v2",
+                            "messageBody": "<h3><span style=\"font-family: times new roman; font-size: 18px\">Pipeline Bronze to Silver - </span><span style=\"font-family: times new roman; font-size: 18px\">@{formatDateTime(utcnow(), 'MM/dd/yyyy')}</span><span style=\"font-family: times new roman; font-size: 24px\"></span><span style=\"font-family: times new roman; font-size: 18px\"></span></h3>\n<p><span style=\"font-family: times new roman; font-size: 16px\"></span><span style=\"font-family: times new roman; font-size: 16px\"><strong>Workspace</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{pipeline().DataFactory}</span><span style=\"font-family: times new roman; font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Pipeline Name</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: PL_Bronze_to_Silver</span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Pipeline Run ID</strong></span><span style=\"font-family: times new roman; font-size: 16px\">:  </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_bronze_to_silver').PipelineRunId}</span><span style=\"font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Start Time</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_bronze_to_silver').ExecutionStartTime}</span><span style=\"font-family: times new roman; font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>End Time</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_bronze_to_silver').ExecutionEndTime}</span><span style=\"font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Duration</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_bronze_to_silver').Duration}</span><span style=\"font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Status</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_bronze_to_silver').Status}</span><span style=\"font-family: times new roman; font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Error Code</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_bronze_to_silver').Error.errorCode}</span><span style=\"font-family: times new roman; font-size: 16px\"></span></p>\n<p><span style=\"font-family: times new roman; font-size: 16px\"><strong>Error Message</strong></span><span style=\"font-family: times new roman; font-size: 16px\">: </span><span style=\"font-family: times new roman; font-size: 16px\">@{activity('pl_bronze_to_silver').Error.message}</span><span style=\"font-family: times new roman; font-size: 16px\"></span><span style=\"font-family: times new roman; font-size: 18px\"></span></p>"
+                        }
+                    }
+                }
+            }
+        ],
+        "concurrency": 1,
+        "variables": {
+            "pipeline_run_time": {
+                "type": "String"
+            },
+            "pl_source_bronze_status": {
+                "type": "String"
+            },
+            "files_loaded": {
+                "type": "Array"
+            },
+            "files_action": {
+                "type": "Array"
+            },
+            "workspace_id": {
+                "type": "String"
+            },
+            "lakehouse_id": {
+                "type": "String"
+            },
+            "files_load_silver": {
+                "type": "Array"
+            },
+            "files_action_silver": {
+                "type": "Array"
+            }
+        },
+        "lastModifiedByObjectId": "d3e79e75-5f67-4da7-b4a6-a3358c0c3f23",
+        "lastPublishTime": "2024-05-25T13:14:52Z"
+    }
+}

@@ -1,0 +1,277 @@
+{
+    "name": "PL_Source_to_Bronze",
+    "objectId": "2d838294-3dc1-4d0e-a4a9-ca35160189e2",
+    "properties": {
+        "activities": [
+            {
+                "name": "get_job_source_to_bronze",
+                "type": "TridentNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "2c2abd02-bd89-423d-a3b3-598036c18916",
+                    "workspaceId": "a2719874-ed1d-47f0-be1d-c88fd0db2547",
+                    "parameters": {
+                        "task_name_param": {
+                            "value": "source_to_bronze",
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "load_table_source_bronze",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "get_job_source_to_bronze",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "items": {
+                        "value": "@json(activity('get_job_source_to_bronze').output.result.exitValue)",
+                        "type": "Expression"
+                    },
+                    "isSequential": true,
+                    "activities": [
+                        {
+                            "name": "source_to_bronze",
+                            "type": "Copy",
+                            "dependsOn": [],
+                            "policy": {
+                                "timeout": "0.12:00:00",
+                                "retry": 0,
+                                "retryIntervalInSeconds": 30,
+                                "secureOutput": false,
+                                "secureInput": false
+                            },
+                            "typeProperties": {
+                                "source": {
+                                    "type": "SqlServerSource",
+                                    "queryTimeout": "02:00:00",
+                                    "partitionOption": "None",
+                                    "datasetSettings": {
+                                        "annotations": [],
+                                        "type": "SqlServerTable",
+                                        "schema": [],
+                                        "typeProperties": {
+                                            "schema": {
+                                                "value": "@item().source_schema",
+                                                "type": "Expression"
+                                            },
+                                            "table": {
+                                                "value": "@item().source_table",
+                                                "type": "Expression"
+                                            },
+                                            "database": "Global_Electronics_Retailer"
+                                        },
+                                        "externalReferences": {
+                                            "connection": "6168dd10-8880-44a7-98b0-3bd4624c5252"
+                                        }
+                                    }
+                                },
+                                "sink": {
+                                    "type": "ParquetSink",
+                                    "storeSettings": {
+                                        "type": "LakehouseWriteSettings"
+                                    },
+                                    "formatSettings": {
+                                        "type": "ParquetWriteSettings",
+                                        "enableVertiParquet": true
+                                    },
+                                    "datasetSettings": {
+                                        "annotations": [],
+                                        "linkedService": {
+                                            "name": "8d30f682_c251_48a7_b5bc_fea79f20096a",
+                                            "properties": {
+                                                "annotations": [],
+                                                "type": "Lakehouse",
+                                                "typeProperties": {
+                                                    "workspaceId": "@pipeline().parameters.workspace_id",
+                                                    "artifactId": "@pipeline().parameters.lakehouse_id",
+                                                    "rootFolder": "Files"
+                                                }
+                                            }
+                                        },
+                                        "type": "Parquet",
+                                        "typeProperties": {
+                                            "location": {
+                                                "type": "LakehouseLocation",
+                                                "fileName": {
+                                                    "value": "@concat(item().target_folder, '_',formatDateTime(utcnow(), 'yyyy_MM_dd'),'.parquet')",
+                                                    "type": "Expression"
+                                                },
+                                                "folderPath": {
+                                                    "value": "@concat('Bronze',  '/', item().target_folder, '/', formatDateTime(utcnow(), 'yyyy'), '/', formatDateTime(utcnow(), 'MM'), '/', formatDateTime(utcnow(), 'dd'), '/')",
+                                                    "type": "Expression"
+                                                }
+                                            },
+                                            "compressionCodec": "snappy"
+                                        },
+                                        "schema": []
+                                    }
+                                },
+                                "enableStaging": false,
+                                "translator": {
+                                    "type": "TabularTranslator",
+                                    "typeConversion": true,
+                                    "typeConversionSettings": {
+                                        "allowDataTruncation": true,
+                                        "treatBooleanAsNumber": false
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "name": "get_full_bronze_loaded",
+                            "type": "AppendVariable",
+                            "dependsOn": [
+                                {
+                                    "activity": "source_to_bronze",
+                                    "dependencyConditions": [
+                                        "Succeeded"
+                                    ]
+                                }
+                            ],
+                            "typeProperties": {
+                                "variableName": "files_loaded",
+                                "value": {
+                                    "value": "{ \"task_id\": @{item().task_id}, \n  \"task_name\": \"@{item().task_name}\", \n  \"phase\": \"@{item().phase}\", \n  \"target_folder\": \"@{item().target_folder}\", \n  \"src_rows_read\": \"@{activity('source_to_bronze').output.rowsRead}\", \n  \"numInserted\": \"@{activity('source_to_bronze').output.rowsCopied}\" \n}",
+                                    "type": "Expression"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "check_log_data",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "bronze_check_data",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "ebba853d-d837-4287-b559-a8ebb9f53ee8",
+                    "workspaceId": "a2719874-ed1d-47f0-be1d-c88fd0db2547",
+                    "parameters": {
+                        "executionYear": {
+                            "value": {
+                                "value": "@formatDateTime(utcnow(), 'yyyy')",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "executionMonth": {
+                            "value": {
+                                "value": "@formatDateTime(utcnow(), 'MM')",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "executionDay": {
+                            "value": {
+                                "value": "@formatDateTime(utcnow(), 'dd')",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "pipelineruntime": {
+                            "value": {
+                                "value": "@pipeline().parameters.pipeline_run_time",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "bronze_action": {
+                            "value": {
+                                "value": "@string(variables('files_action'))",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "workspaceid": {
+                            "value": {
+                                "value": "@pipeline().parameters.workspace_id",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "lakehouseid": {
+                            "value": {
+                                "value": "@pipeline().parameters.lakehouse_id",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "bronze_check_data",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "load_table_source_bronze",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "variableName": "files_action",
+                    "value": {
+                        "value": "@variables('files_loaded')",
+                        "type": "Expression"
+                    }
+                }
+            }
+        ],
+        "concurrency": 1,
+        "parameters": {
+            "pipeline_run_time": {
+                "type": "string"
+            },
+            "lakehouse_id": {
+                "type": "string"
+            },
+            "workspace_id": {
+                "type": "string"
+            }
+        },
+        "variables": {
+            "files_loaded": {
+                "type": "Array"
+            },
+            "files_action": {
+                "type": "Array"
+            }
+        },
+        "lastModifiedByObjectId": "d3e79e75-5f67-4da7-b4a6-a3358c0c3f23",
+        "lastPublishTime": "2024-05-25T19:39:07Z"
+    }
+}

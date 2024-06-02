@@ -1,0 +1,180 @@
+{
+    "name": "PL_Bronze_to_Silver",
+    "objectId": "715b2d24-d0bd-4d0f-9edd-a3f00bc0d046",
+    "properties": {
+        "activities": [
+            {
+                "name": "get_job_bronze_to_silver",
+                "type": "TridentNotebook",
+                "dependsOn": [],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "2c2abd02-bd89-423d-a3b3-598036c18916",
+                    "workspaceId": "a2719874-ed1d-47f0-be1d-c88fd0db2547",
+                    "parameters": {
+                        "task_name_param": {
+                            "value": "bronze_to_silver",
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            {
+                "name": "load_task_bronze_to_silver",
+                "type": "ForEach",
+                "dependsOn": [
+                    {
+                        "activity": "get_job_bronze_to_silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "typeProperties": {
+                    "items": {
+                        "value": "@json(activity('get_job_bronze_to_silver').output.result.exitValue)",
+                        "type": "Expression"
+                    },
+                    "activities": [
+                        {
+                            "name": "append_file_load",
+                            "type": "AppendVariable",
+                            "dependsOn": [],
+                            "typeProperties": {
+                                "variableName": "files_load_silver",
+                                "value": {
+                                    "value": "{ \"task_id\": @{item().task_id}, \n  \"task_name\": \"@{item().task_name}\", \n  \"source_folder\": \"@{item().source_folder}\",\n  \"target_schema\": \"@{item().target_schema}\",\n  \"target_table\": \"@{item().target_table}\",\n  \"phase\": \"@{item().phase}\" \n}",
+                                    "type": "Expression"
+                                }
+                            }
+                        }
+                    ]
+                }
+            },
+            {
+                "name": "set_files_action",
+                "type": "SetVariable",
+                "dependsOn": [
+                    {
+                        "activity": "load_task_bronze_to_silver",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "variableName": "files_action_silver",
+                    "value": {
+                        "value": "@variables('files_load_silver')",
+                        "type": "Expression"
+                    }
+                }
+            },
+            {
+                "name": "check_load_silver",
+                "type": "TridentNotebook",
+                "dependsOn": [
+                    {
+                        "activity": "set_files_action",
+                        "dependencyConditions": [
+                            "Succeeded"
+                        ]
+                    }
+                ],
+                "policy": {
+                    "timeout": "0.12:00:00",
+                    "retry": 0,
+                    "retryIntervalInSeconds": 30,
+                    "secureOutput": false,
+                    "secureInput": false
+                },
+                "typeProperties": {
+                    "notebookId": "08717da5-387a-4f57-b0d6-0bbcc280baaa",
+                    "workspaceId": "a2719874-ed1d-47f0-be1d-c88fd0db2547",
+                    "parameters": {
+                        "executionYear": {
+                            "value": {
+                                "value": "@formatDateTime(utcnow(), 'yyyy')",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "executionMonth": {
+                            "value": {
+                                "value": "@formatDateTime(utcnow(), 'MM')",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "executionDay": {
+                            "value": {
+                                "value": "@formatDateTime(utcnow(), 'dd')",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "workspaceid": {
+                            "value": {
+                                "value": "@pipeline().parameters.workspace_id",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "lakehouseid": {
+                            "value": {
+                                "value": "@pipeline().parameters.lakehouse_id",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "files_action_silver": {
+                            "value": {
+                                "value": "@string(variables('files_action_silver'))",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        },
+                        "pipelineruntime": {
+                            "value": {
+                                "value": "@pipeline().parameters.pipelineruntime",
+                                "type": "Expression"
+                            },
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        ],
+        "parameters": {
+            "workspace_id": {
+                "type": "string"
+            },
+            "lakehouse_id": {
+                "type": "string"
+            },
+            "pipelineruntime": {
+                "type": "string"
+            }
+        },
+        "variables": {
+            "files_load_silver": {
+                "type": "Array"
+            },
+            "files_action_silver": {
+                "type": "Array"
+            }
+        },
+        "lastModifiedByObjectId": "d3e79e75-5f67-4da7-b4a6-a3358c0c3f23",
+        "lastPublishTime": "2024-05-26T04:36:08Z"
+    }
+}

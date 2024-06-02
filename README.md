@@ -47,8 +47,7 @@ _Table of contents_
 - **Analytics**: This last step we will use tools and techniques to analyze the data in the data warehouse, such as: Power BI, Tableau, ..
 
 ## 2.2. Physical Architecture
-![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/b09eca19-b603-421b-9aad-6351736ad90c)
-
+![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/7a179ac4-2ded-4903-9929-fe7c6551f8db)
 
   
 # **3. Building End to End solutions**

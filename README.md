@@ -1,4 +1,4 @@
-![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/70dc360c-4ec7-4b2e-a210-d58ef55c3264)# Global_Electronics_Retailer_Fabric
+# Global_Electronics_Retailer_Fabric
 Build an End to End Data Engineer project for Analysis Global Electronics Retailer with Microsoft Fabric
 
 

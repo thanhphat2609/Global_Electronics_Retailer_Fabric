@@ -49,6 +49,11 @@ _Table of contents_
 ## 2.2. Physical Architecture
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/7a179ac4-2ded-4903-9929-fe7c6551f8db)
 
+- **Data Source** Layer: This layer is responsible for collecting and storing data from various sources, such as retail transaction data and customer data.
+
+- **Data Transformation** Layer: Initially, data from the Source will be loaded into the Bronze layer (Files in Lakehouse) and stored in parquet format through a Pipeline (Source_to_Bronze). The data will then be validated and transformed, and stored in Delta format in the Silver layer (Tables in Lakehouse). Similar to the Bronze layer, there will be a Pipeline responsible for this task (Bronze_to_Silver). After obtaining data from the Silver layer, we proceed to create Dim and Fact tables in the Gold layer and upload them to Power BI using Direct Lake connectivity.
+
+- **Reporting**: This layer is responsible for presenting data from the application layer to users in an understandable manner. This may include using web interfaces, mobile applications, or desktop applications.
   
 # **3. Building End to End solutions**
 
@@ -60,6 +65,7 @@ Look at **Data_Dictonary.xlxs**
 ## 3.2. Orchestration (Data Catalog)
 
 - **config_table**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/ba5ae819-530f-46a0-9aa7-c456dbe752a3)
 
 

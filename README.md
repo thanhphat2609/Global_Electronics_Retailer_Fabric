@@ -160,6 +160,20 @@ Look at **Data_Dictonary.xlxs**
 
 
 ## 4.2. Report
+**Home**
+![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/df69bff2-ced6-42ff-883d-2c4c460d6115)
+
+**Summary**
+
+**Stores**
+
+**Products**
+
+**Customers**
+
+**Report Change Log**
+![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/52db1c7e-2d8c-4dea-bee2-caa01fe70d61)
+
 
 # 5. Conclusion
 Through project, its helps me alot to improve my skill in PySpark, not base on too much Fabric Warehouse.

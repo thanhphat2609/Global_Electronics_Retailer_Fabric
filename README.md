@@ -9,7 +9,7 @@ _Table of contents_
   * [3.1. Dataset](#31-dataset)
   * [3.2. Orchestration (Data Catalog)](#32-orchestration-data-catalog)
   * [3.3. Building Master Pipeline](#33-building-master-pipeline)
- - [**4. Power BI**](#4-power-bi)
+- [**4. Power BI**](#4-power-bi)
   * [4.1. Data Model](#41-data-model)
     + [4.1.1. Data Model Power BI](#411-data-model-power-bi)
     + [4.1.2. Table Manage Relationships](#412-table-manage-relationships)

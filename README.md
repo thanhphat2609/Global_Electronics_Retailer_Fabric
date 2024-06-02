@@ -94,16 +94,15 @@ Look at **Data_Dictonary.xlxs**
 
 
 - Master Pipeline
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/8772c116-9154-41ae-a926-9a4ff170218d)
 
-
-
 **Source to Bronze Child Pipeline**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/aa2025b9-a562-4b74-92cf-d6bb904c996d)
 
-
-
 **Silver to Gold Child Pipeline**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/24b7b398-0c0a-4ca6-b6a3-610b05d464a1)
 
 
@@ -111,24 +110,28 @@ Look at **Data_Dictonary.xlxs**
 
 - Results
 
-**Pipeline**
+**Master Pipeline**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/067e289e-6956-414d-b8c9-41b7b1526d0d)
 
 
  
 **Source -> Bronze**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/4d79388b-9718-4a9f-b586-3c88fca7c28a)
 
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/da346e5c-e6b4-46c2-a41e-ed8c1a0204a1)
 
 
 **Bronze -> Silver**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/66399679-2ca6-4219-af3f-b8484234553d)
 
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/9c40584d-3f40-4f95-86bf-55c4cc4035fe)
 
 
 **Gold**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/a8565d64-18a3-4711-a4d4-380fcd9fe8dd)
 
 
@@ -137,9 +140,11 @@ Look at **Data_Dictonary.xlxs**
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/74e78d30-4111-48be-87cb-b480348c9272)
 
 1. Source to Bronze
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/68979b8f-ac1a-400e-8ab4-4289e1facd36)
 
 2. Bronze to Silver
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/e1d0d0b2-696e-4f3a-9385-ff394aa7d418)
 
 
@@ -151,16 +156,19 @@ Look at **Data_Dictonary.xlxs**
 
 
 ### 4.1.1. Data Modelling Power BI
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/f9b0e9fe-87f7-4777-b59e-255e109c0df6)
 
 
 ### 4.1.2. Manage Relationships
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/8a021161-7737-4412-acee-45f83f9932ce)
 
 
 
 ## 4.2. Report
 **Home**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/df69bff2-ced6-42ff-883d-2c4c460d6115)
 
 **Summary**
@@ -172,6 +180,7 @@ Look at **Data_Dictonary.xlxs**
 **Customers**
 
 **Report Change Log**
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/52db1c7e-2d8c-4dea-bee2-caa01fe70d61)
 
 

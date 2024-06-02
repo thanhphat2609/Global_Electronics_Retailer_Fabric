@@ -73,12 +73,13 @@ Look at **Data_Dictonary.xlxs**
 - Create **Data Gateway Connection** for Fake Customer DB Source
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/8b14e41a-6a42-465d-a821-b88301e41eae)
 
-- Config ** Data Gateway **
+- Config **Data Gateway**
 
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/1b8202b3-9a5f-47a1-9182-f0c436d4da45)
 
 
 - Items in Fabric
+
 **DEV**
   
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/e4b0f8f1-a459-4b47-a568-cf5df57a91b1)
@@ -109,7 +110,7 @@ Look at **Data_Dictonary.xlxs**
 
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/aa2025b9-a562-4b74-92cf-d6bb904c996d)
 
-**Silver to Gold Child Pipeline**
+**Bronze to Silver Child Pipeline**
 
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/24b7b398-0c0a-4ca6-b6a3-610b05d464a1)
 

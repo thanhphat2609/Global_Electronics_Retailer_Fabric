@@ -73,10 +73,9 @@ _Table of contents_
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/ba5ae819-530f-46a0-9aa7-c456dbe752a3)
 
 
-
-
 ## 3.3. Building Master Pipeline
 - Create **Data Gateway Connection** for Fake Customer DB Source
+
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/8b14e41a-6a42-465d-a821-b88301e41eae)
 
 - Config **Data Gateway**
@@ -103,9 +102,14 @@ _Table of contents_
 
 - Notebook
 
-| **Notebook**          | **Meaning** |
+| **Notebook, Python files**          | **Meaning** |
 |-------------------|-------------- |
-|Bronze_Transformation| Transform data from Lakehouse_Bronze and save as Delta table |
+| NB_detect_workspace_lakehouse | Notebook that identifies the WorkspaceID containing the Notebook and the LakehouseID so that the Notebook can read and save data into Files and Tables |
+| NB_get_job | Reads data from Fabric Warehouse with Params being task_name (source_to_bronze or bronze_to_silver) |
+| NB_check_data_bronze | Checks data from Source to Bronze to ensure no data loss |
+| NB_check_load_silver | Validates data from the Bronze layer to save as Delta Table for the Gold layer |
+| FabricUDFManagement | Python file storing Classes containing functions that are frequently used in the Notebooks |
+
 
 
 - Master Pipeline
@@ -183,17 +187,28 @@ _Table of contents_
 
 
 ## 4.2. Report
-**Home**
+
+- **Full Report**: [RP_Global_Electronics_Retailer](https://app.fabric.microsoft.com/Redirect?action=OpenApp&appId=67419f4c-bea7-4b81-afbd-880d88a32914&ctid=2b2f6548-44f4-44f3-94a1-8dd71dbaadb7)
+
+- **Home**
 
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/df69bff2-ced6-42ff-883d-2c4c460d6115)
 
-**Summary**
+- **Summary**
 
-**Stores**
+![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/3bd1cc3d-e990-47bc-aadb-660e3b2bac81)
 
-**Products**
+- **Stores**
 
-**Customers**
+![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/b231f921-bb35-4983-b8bd-846f1469b941)
+
+- **Products**
+
+![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/ad3267d5-0cbc-4150-b544-1931430583c4)
+
+- **Customers**
+
+![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/08c88c92-5d8d-4d02-84bd-3722fe5ebd85)
 
 **Report Change Log**
 

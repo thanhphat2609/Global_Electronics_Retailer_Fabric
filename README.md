@@ -188,8 +188,6 @@ _Table of contents_
 
 ## 4.2. Report
 
-- **Full Report**: [RP_Global_Electronics_Retailer](https://app.fabric.microsoft.com/Redirect?action=OpenApp&appId=67419f4c-bea7-4b81-afbd-880d88a32914&ctid=2b2f6548-44f4-44f3-94a1-8dd71dbaadb7)
-
 - **Home**
 
 ![image](https://github.com/thanhphat2609/Global_Electronics_Retailer_Fabric/assets/84914537/df69bff2-ced6-42ff-883d-2c4c460d6115)

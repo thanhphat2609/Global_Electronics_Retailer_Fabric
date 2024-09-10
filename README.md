@@ -1,5 +1,7 @@
 # Global_Electronics_Retailer_Fabric
 
+---
+
 _Table of contents_
 - [**1. Microsoft Fabric**](#1-microsoft-fabric)
 - [**2. Data Architecture**](#2-data-architecture)
@@ -18,6 +20,7 @@ _Table of contents_
 - [**6. Lessons Learned**](#6-lessons-learned)
 - [**7. Next step**](#7-next-step)
 
+---
 
  # **1. Microsoft Fabric**
 ![Items](https://github.com/thanhphat2609/Global_Super_Store/assets/84914537/b2552438-9fc2-4308-ac2e-bd417c706f4b)
